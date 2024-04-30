@@ -6,6 +6,7 @@ from party import read_parties, write_party, remove_party
 import json
 
 app = Flask(__name__)
+app.run(debug=False)
 app.static_folder = "static"
 
 @app.route("/", methods=["GET", "POST"])
