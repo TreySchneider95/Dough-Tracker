@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
+</head>
+<body>
+    <div class="settings">
+        <i id="settings" class="fa fa-gear" onclick="openForm()"></i>
+        <div class="form-popup" id="myForm">
+            <input id="userinput" type="text" placeholder="Enter new flavor here">
+            <button id="enter">Add</button>
+            <h5>Current Dropdown list:</h5>
+            <ul id="myUL">
+                {% for option in dd %}
+                  <li onclick="remove(this)">{{ option }} <i class="fa fa-trash"></i></li>
+                {% endfor %}
+            </ul>
+            <div class="close" onclick="closeForm()">Close and save</div>
+        </div>
+        <div id="partyForm">
+            <div class="partyFormInside">
+                <h4>New Party</h4>
+                <form class="partyForm" action="">
+                    <input id="partyName" required class="name" type="text" placeholder="Party Name">
+                    <div id="doughs" class="partyForm"></div>
+                    <button class="form-button" type="button" id="addDough">Add a Dough</button>
+                    <button class="form-button" type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="title">
+        <h1>SELECT A PARTY</h1>
+    </div>
+    <div id="body">
+
+            {% for party in party_names %}
+                <a href="{{ url_for('get_party', name=party) }}">
+                    <div id="add-new" class="home-button">
+                        {{ party }}
+                    </div>
+                </a>
+            {% endfor %}
+
+    </div>
+    <div class="footer">
+        <div class="add-new" onclick="openAddPartyForm()">
+            ADD A NEW PARTY
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+    <script>
+        function closeForm() {
+            let dd = [];
+            $('li').each(function(i, elem) {
+                dd.push($(elem).text());
+            });
+            $.ajax({
+                type: "POST",
+                url: "{{ url_for('home') }}",
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify({
+                  dd: dd
+                })
+              });
+            document.getElementById("myForm").style.display = "none";
+          }
+
+          $(document).ajaxStop(function(){
+                window.location.reload();
+            });
+
+        $(document).ready(function(){
+            $('#addDough').click(function(){
+                var doughOptions = {{ dd | tojson }};
+                var select = $('<select class="doughSelect formSelect">');
+                $.each(doughOptions, function(index, option) {
+                   select.append($('<option>').text(option).attr('value', option));
+                });
+                var quantityInput = $('<input type="number" class="quantityInput formQty" placeholder="Qty">');
+                var wrapper = $('<div class="doughWrapper partyForm">').append(select).append(quantityInput);
+                $('#doughs').append(wrapper);
+            });
+        });
+
+        $(document).ready(function(){
+            $('#partyForm').submit(function(event){
+
+                // Capture all inputs
+                var partyName = $('#partyName').val();
+                var doughs = [];
+                $('.doughWrapper').each(function(){
+                    var dough = {};
+                    dough['name'] = $(this).find('.doughSelect option:selected').val();
+                    dough['quantity'] = $(this).find('.quantityInput').val();
+                    doughs.push(dough);
+                });
+                console.log(doughs)
+                console.log(partyName)
+                // Clear all inputs
+                $('.partyInput').val('');
+                $('.doughWrapper').remove();
+
+                document.getElementById("partyForm").style.display = "none"
+
+                // Send data through AJAX to Flask backend
+                $.ajax({
+                    url: "{{ url_for('add_party') }}",
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({'party_name': partyName, 'doughs': doughs}),
+                    success: function(response) {
+                        console.log('Form submitted successfully');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error submitting form:', error);
+                    }
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
+
+

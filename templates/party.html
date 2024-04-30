@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ party.party_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/party.css') }}">
+</head>
+<body>
+    <div id="title">
+        <h1>{{ party.party_name }}</h1>
+    </div>
+    <div id="body">
+        {% for dough in party.doughs %}
+                <div id="add-new" class="home-button">
+                    {{ dough.name }}
+                    <p style="padding: 0; margin: 0;"><span class="dough-qty">{{ dough.quantity }}</span> Left</p>
+                </div>
+        {% endfor %}
+    </div>
+    <div class="footer">
+        
+        <a href="{{ url_for('finish_party', name=party.party_name) }}">
+            <div class="finish-div">
+                Finish party
+            </div>
+        </a>
+             
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    $('.home-button').click(function () {
+        let left = Number($(this).find('p span').text())
+        left -= 1
+        if(left > 0){
+            $(this).find('p span').text(left)
+        }else{
+            $(this).find('p span').text("None")
+        }
+    });
+</script>
+</html>
