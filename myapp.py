@@ -6,7 +6,6 @@ from party import read_parties, write_party, remove_party
 import json
 
 app = Flask(__name__)
-app.run(debug=False)
 app.static_folder = "static"
 
 @app.route("/", methods=["GET", "POST"])
@@ -47,3 +46,5 @@ def finish_party(name):
     remove_party(name)
     return redirect(url_for('home'))
     
+if __name__=="__main__":
+    port=4444
