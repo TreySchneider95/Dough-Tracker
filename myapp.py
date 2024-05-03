@@ -42,6 +42,7 @@ def get_party(name):
 
 @app.route("/finish_party/<name>", methods=["GET"])
 def finish_party(name):
+    # export to xml
     print(name)
     remove_party(name)
     return redirect(url_for('home'))

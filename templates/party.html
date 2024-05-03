@@ -33,11 +33,7 @@
     $('.home-button').click(function () {
         let left = Number($(this).find('p span').text())
         left -= 1
-        if(left > 0){
-            $(this).find('p span').text(left)
-        }else{
-            $(this).find('p span').text("None")
-        }
+        $(this).find('p span').text(left)
     });
 </script>
 </html>
