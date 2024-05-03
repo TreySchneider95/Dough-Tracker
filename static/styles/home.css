@@ -90,7 +90,8 @@ body{
     padding: 3px 5px;
 }
 #enter{
-    background-color: rgb(241, 9, 9);
+    background-color: rgb(251, 241, 217);
+    color: rgb(51, 36, 19);
     border: 0px solid black;
     padding: 3px 10px;
     border-radius: 10px;
