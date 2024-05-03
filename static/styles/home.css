@@ -130,6 +130,7 @@ li i {
 }
 .form-button{
     background-color: rgb(251, 241, 217);
+    color: rgb(51, 36, 19);
     border: none;
     padding: 10px;
     margin: 20px 0;
