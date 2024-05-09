@@ -1,4 +1,5 @@
 import csv
+import pandas as pd
 
 def read_parties():
     parties = []
@@ -32,9 +33,16 @@ def write_party(data):
         for dough in doughs:
             dough_writer.writerow({'party_name': data['party_name'], 'dough_name': dough['name'], 'quantity': dough['quantity']})
 
+def write_party_to_excel(party_name, party_data):
+    filename = f"{party_name}.xlsx"
+    df = pd.DataFrame(party_data)
+    df.to_excel(filename, index=False)
+    return filename
+
 def remove_party(party_name):
     parties = read_parties()
     filtered_parties = [party for party in parties if party['party_name'] != party_name]
+    the_party = [party for party in parties if party['party_name'] == party_name][0]
     print(filtered_parties)
     f = open('party.csv', "w+")
     f.close()

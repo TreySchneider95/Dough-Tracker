@@ -18,8 +18,12 @@
                 </div>
         {% endfor %}
     </div>
+
     <div class="footer">
-        
+        <div id="add-new" class="home-button-1">
+            Total Scoops
+            <p style="padding: 0; margin: 0;"><span class="total-dough">0</span></p>
+        </div>
         <a href="{{ url_for('finish_party', name=party.party_name) }}">
             <div class="finish-div">
                 Finish party
@@ -30,9 +34,14 @@
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
+    let totalTag = $('.total-dough')
+    let total = Number($('.total-dough').text())
     $('.home-button').click(function () {
+        console.log(total)
         let left = Number($(this).find('p span').text())
         left -= 1
+        total += 1
+        totalTag.text(total)
         $(this).find('p span').text(left)
     });
 </script>
