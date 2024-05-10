@@ -62,7 +62,8 @@ def get_party(name):
 @app.route("/finish_party/<name>", methods=["GET", "POST"])
 def finish_party(name):
     if request.method == "GET":
-        pass
+        remove_party(name)
+        return redirect(url_for('home'))
     else:
         info = json.loads(request.data.decode('utf-8'))
         print(info)
@@ -74,8 +75,7 @@ def finish_party(name):
         msg = Message(subject=subject, sender=mail_username, recipients=[mail_username])
         msg.body = body
         mail.send(msg)
-    remove_party(name)
-    return redirect(url_for('home'))
+        return "success"
     
 if __name__=="__main__":
     port=4444
