@@ -43,7 +43,6 @@ def remove_party(party_name):
     parties = read_parties()
     filtered_parties = [party for party in parties if party['party_name'] != party_name]
     the_party = [party for party in parties if party['party_name'] == party_name][0]
-    print(filtered_parties)
     f = open('party.csv', "w+")
     f.close()
     for x in filtered_parties:

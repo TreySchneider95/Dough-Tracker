@@ -8,12 +8,13 @@
 </head>
 <body>
     <div id="title">
-        <h1>{{ party.party_name }}</h1>
+        <h1 id="name">{{ party.party_name }}</h1>
     </div>
     <div id="body">
         {% for dough in party.doughs %}
                 <div id="add-new" class="home-button">
                     {{ dough.name }}
+                    <p id="estimated" style="display: none;">{{ dough.quantity }}</p>
                     <p style="padding: 0; margin: 0;"><span id="qty" class="dough-qty">{{ dough.quantity }}</span> Left</p>
                     <p style="padding: 0; margin: 0;"><span id="total" class="total-dough-qty">0</span> Total</p>
                 </div>
@@ -25,7 +26,7 @@
             Total Scoops
             <p style="padding: 0; margin: 0;"><span class="total-dough">0</span></p>
         </div>
-        <a href="{{ url_for('finish_party', name=party.party_name) }}">
+        <a id="end_party" href="{{ url_for('finish_party', name=party.party_name) }}">
             <div class="finish-div">
                 Finish party
             </div>
@@ -48,5 +49,46 @@
         $(this).find('p #qty').text(left)
         $(this).find('p #total').text(totalDough)
     });
+    let returnObj = {}
+
+    const getDoughObj = function(){
+        var doughList = [];
+        $('#body .home-button').each(function() {
+            var $button = $(this);
+            var name = $button.contents().filter(function() {
+                return this.nodeType === 3;
+            }).text().trim();
+            var estimated = parseInt($button.find('#estimated').text());
+            var qty = parseInt($button.find('.dough-qty').text());
+            var total = parseInt($button.find('.total-dough-qty').text());
+            var dough = {
+                name: name,
+                estimated: estimated,
+                qtyLeft: qty,
+                total: total
+            };
+            doughList.push(dough);
+        });
+        return doughList
+    }
+
+    $('#end_party').click(function (e){
+        let url = $(this).attr('href')
+        let totalServed = Number($('.total-dough').text())
+        let partyName = $("#name").text()
+        console.log(getDoughObj())
+        $.ajax({
+            url: url,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({'party_name': partyName, 'total_served': totalServed, doughList: getDoughObj()}),
+            success: function(response) {
+                console.log('Form submitted successfully');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error submitting form:', error);
+            }
+        });
+    })
 </script>
 </html>
