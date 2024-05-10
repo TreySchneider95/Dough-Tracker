@@ -69,7 +69,7 @@ def finish_party(name):
         subject = f"{name} party info"
         body = f"{name}\n\n"
         for x in info['doughList']:
-            body += f"\t{x["name"]}:\n\n\tEstimated Scoops: {x["estimated"]}\n\tQty Left: {x['qtyLeft']}\n\tTotal Scoops: {x["total"]}\n\n"
+            body += f"\t{x['name']}:\n\n\tEstimated Scoops: {x['estimated']}\n\tQty Left: {x['qtyLeft']}\n\tTotal Scoops: {x['total']}\n\n"
         body += f"\n\nTotal Scoops: {info['total_served']}"
         msg = Message(subject=subject, sender=mail_username, recipients=[mail_username])
         msg.body = body
