@@ -14,7 +14,8 @@
         {% for dough in party.doughs %}
                 <div id="add-new" class="home-button">
                     {{ dough.name }}
-                    <p style="padding: 0; margin: 0;"><span class="dough-qty">{{ dough.quantity }}</span> Left</p>
+                    <p style="padding: 0; margin: 0;"><span id="qty" class="dough-qty">{{ dough.quantity }}</span> Left</p>
+                    <p style="padding: 0; margin: 0;"><span id="total" class="total-dough-qty">0</span> Total</p>
                 </div>
         {% endfor %}
     </div>
@@ -38,11 +39,14 @@
     let total = Number($('.total-dough').text())
     $('.home-button').click(function () {
         console.log(total)
-        let left = Number($(this).find('p span').text())
+        let left = Number($(this).find('p #qty').text())
+        let totalDough = Number($(this).find('p #total').text())
         left -= 1
         total += 1
+        totalDough += 1
         totalTag.text(total)
-        $(this).find('p span').text(left)
+        $(this).find('p #qty').text(left)
+        $(this).find('p #total').text(totalDough)
     });
 </script>
 </html>
